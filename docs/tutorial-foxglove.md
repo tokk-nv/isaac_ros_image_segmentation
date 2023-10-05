@@ -16,7 +16,7 @@ RUN apt-get update && mkdir -p ${ROS_ROOT}/src && cd ${ROS_ROOT}/src \
     && colcon build --merge-install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo --packages-up-to foxglove_bridge \
     && rm -Rf src build log \
 && rm -rf /var/lib/apt/lists/* \
-&& apt-get cleand
+&& apt-get clean
 ```
 
 Also, when executing `docker run` command, mount the model directory for `peoplesemsegnet_shuffleseg` files to skip TensorRT engine build process.
