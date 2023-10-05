@@ -18,7 +18,7 @@
 import launch
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import ComposableNodeContainer
+from launch_ros.actions import ComposableNodeContainer, Node
 from launch_ros.descriptions import ComposableNode
 
 
@@ -196,5 +196,15 @@ def generate_launch_description():
         output='screen'
     )
 
-    final_launch_description = launch_args + [container]
+    # https://foxglove.dev/docs/studio/connection/ros2
+    # https://github.com/foxglove/ros-foxglove-bridge
+    foxglove_bridge_node = ComposableNodeContainer(
+        name='unet_container',
+        namespace='',
+        package='foxglove_bridge',
+        executable='foxglove_bridge',
+        output='screen'
+    )
+
+    final_launch_description = launch_args + [container] + [foxglove_bridge_node]
     return launch.LaunchDescription(final_launch_description)
