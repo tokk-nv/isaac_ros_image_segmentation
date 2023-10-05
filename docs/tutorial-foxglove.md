@@ -4,7 +4,7 @@
 
 ### Modify `dockerfile.ros2_humble` to build custom container
 
-First, add the following in `isaac_ros_common/docker/Dockerfile.ros2_humble` before its `FROM ${BASE_IMAGE}` line.
+First, add the following in `isaac_ros_common/docker/Dockerfile.aarch64.ros2_humble` after `FROM nvcr.io/nvidia/isaac/ros:aarch64-ros2_humble_33836e394da2d095a59afd2d151038f8` line.
 
 ```
 # Install foxglove_bridge
@@ -17,13 +17,6 @@ RUN apt-get update && mkdir -p ${ROS_ROOT}/src && cd ${ROS_ROOT}/src \
     && rm -Rf src build log \
 && rm -rf /var/lib/apt/lists/* \
 && apt-get cleand
-```
-
-Then remove `Dockerfile.aarch64.ros2_humble` to skip just pulling a pre-built container image from NGC.
-
-```
-cd $ISAAC_ROS_WS
-rm src/isaac_ros_common/docker/Dockerfile.aarch64.ros2_humble
 ```
 
 Also, when executing `docker run` command, mount the model directory for `peoplesemsegnet_shuffleseg` files to skip TensorRT engine build process.
@@ -78,7 +71,7 @@ Inside the container
 
 ```
 source ./install/setup.bash
-ros2 launch isaac_ros_unet isaac_ros_argus_unet_triton.launch.py \
+ros2 launch isaac_ros_unet isaac_ros_argus_unet_triton_foxglove.launch.py \
     model_name:=peoplesemsegnet_shuffleseg \
     model_repository_paths:=['/tmp/models'] \
     input_binding_names:=['input_2:0'] \
@@ -95,8 +88,7 @@ isaac_ros_container
 Inside the container
 
 ```
-source ./install/setup.bash
-ros2 launch foxglove_bridge foxglove_bridge.xml
+ros2 topic list
 ```
 
 
